@@ -3,8 +3,14 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define clear() printf("\033[H\033[J")
-#define gotoxy(x,y) printf("\033[%d;%dH", (x), (y))
+
+
+void clearScreen() {
+    printf("\033[H\033[J");
+}
+void gotoxy(int x, int y) {
+    printf("\033[%d;%dH", (y), (x));
+}
 
 
 struct winsize w;
@@ -40,7 +46,7 @@ void *drawProgress(void *null)
     while (stop == 0) {
         usleep(20000);
         saveCursorPos();
-        gotoxy(height, n);
+        gotoxy(n, height);
         n++;
         if (n > width - 1) {
             n = 0;
@@ -57,7 +63,7 @@ int main () {
     pthread_t drawProgress_thread;
     int c;
 
-    clear();
+    clearScreen();
 
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     if(pthread_create(&drawProgress_thread, NULL, drawProgress, NULL)) {
