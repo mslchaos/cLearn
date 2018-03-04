@@ -1,0 +1,2 @@
+void disableTerminalEcho ();
+void enableTerminalEcho ();
